@@ -35,7 +35,9 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // $category = new Category();
+        // $category->name = $request->name;
+        // $category->slug = str_slug($request())
     }
 
     /**
