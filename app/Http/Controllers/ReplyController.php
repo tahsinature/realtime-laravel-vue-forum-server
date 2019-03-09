@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Model\Reply;
+use App\Model\Question;
 use Illuminate\Http\Request;
+use App\Http\Resources\ReplyResource;
 
 class ReplyController extends Controller
 {
@@ -12,19 +14,10 @@ class ReplyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Question $question)
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return ReplyResource::collection($question->replies);
+        // return $question->replies;
     }
 
     /**
@@ -33,9 +26,10 @@ class ReplyController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Question $question)
     {
-        //
+        $reply = $question->replies()->create($request->all());
+        return \response($reply, 201);
     }
 
     /**
@@ -48,18 +42,7 @@ class ReplyController extends Controller
     {
         //
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Model\Reply  $reply
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Reply $reply)
-    {
-        //
-    }
-
+    
     /**
      * Update the specified resource in storage.
      *
@@ -67,9 +50,10 @@ class ReplyController extends Controller
      * @param  \App\Model\Reply  $reply
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Reply $reply)
+    public function update(Question $question, Request $request, Reply $reply)
     {
-        //
+        $reply->update($request->all());
+        return \response($reply, 200);
     }
 
     /**
@@ -78,8 +62,9 @@ class ReplyController extends Controller
      * @param  \App\Model\Reply  $reply
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Reply $reply)
+    public function destroy(Question $question, Reply $reply)
     {
-        //
+        $reply->delete();
+        return \response($question->replies, 200);
     }
 }
